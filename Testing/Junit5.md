@@ -17,6 +17,23 @@
         - JUnit3, JUnit4 기반의 테스트를 실행하기 위한 TestEngine을 제공
     
 
+- Meta-Annotations and Composed Annotations
+    - Jupiter annotation은 meta-annotation으로 사용될 수 있다.  
+    - 사용자만의 합성(Composed) 어노테이션을 생성할 수 있다.
+    - example
+        -     @Target(ElementType.METHOD)
+              @Retention(RetentionPolicy.RUNTIME)
+              @Tag("fast")
+              @Test
+              public @interface FastTest {
+              }
+        -     @FastTest
+              void myFastTest() {
+              // ...
+              }
+        - @FastTest라는 Composed Annotation을 사용하는걸로 @Tag("fast"), @Test 등을 붙일 수 있다.
+
+
 
 ## 참고
 - [문서] [**JUnit 5 User Guide**](https://junit.org/junit5/docs/current/user-guide/)
