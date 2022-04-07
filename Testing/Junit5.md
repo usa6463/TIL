@@ -75,7 +75,9 @@
     - standard: assertEquals, assertTrue 같은 기본 assertion
     - grouped: assertAll 내에 다수의 assertions를 넣을 수 있다. 내부의 standard assertions들은 모두 실행되고, 하나라도 실패되면 grouped assertions 실패가 된다.
     - dependent: 같은 코드 블록내에 다수의 assertion이 있을 때 한 assertion이 실패하면 같은 블록 내 나머지 코드들이 skip 된다.
-    - exception : assertThrows로 예외 던지는 경우에 대한 테스팅 가능
+    - exception: assertThrows로 예외 던지는 경우에 대한 테스팅 가능
+    - timeout: assertTimeout을 통해 테스트 하고자 하는 코드에 timeout을 걸고 timeout이 지나면 실패하도록 할 수 있음.
+    - Preemptively: assertTimeoutPreemptively() 라는 메소드 제공. 제공된 executable or supplier를 다른 스레드에서 실행. Spring에서의 transactional testing support가 흔한 사용처
     
 
 ## 참고
