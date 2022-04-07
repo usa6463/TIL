@@ -79,6 +79,15 @@
     - timeout: assertTimeout을 통해 테스트 하고자 하는 코드에 timeout을 걸고 timeout이 지나면 실패하도록 할 수 있음.
     - Preemptively: assertTimeoutPreemptively() 라는 메소드 제공. 제공된 executable or supplier를 다른 스레드에서 실행. Spring에서의 transactional testing support가 흔한 사용처
     
+- Assumptions
+    - 특정 조건이 맞을 때 코드를 실행하도록 하는 구문
+    - assumeTrue, assumingThat
+    
+- Disabled
+    - @Disabled("reason") 어노테이션을 붙이는 걸로 테스트 메소드 혹은 테스트 클래스 대상으로 테스팅을 실행하지 않도록 할 수 있음.
+    
+
+    
 
 ## 참고
 - [문서] [**JUnit 5 User Guide**](https://junit.org/junit5/docs/current/user-guide/)
