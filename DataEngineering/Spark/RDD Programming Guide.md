@@ -63,3 +63,18 @@
         - SparkContext.hadoopRDD
             - 다른 Hadoop InputFormats을 위해 사용
     
+- RDD Operations
+    - 2개 타입의 operation 제공
+        - transformation: 기존 데이터셋으로 부터 새로 데이터셋 생성
+        - action: 데이터셋에서 연산 수행 후 하나의 값을 드라이버 프로그램에 반환 
+    - lazy
+        - transformation은 lazy한데 그 결과를 바로 반환하는게 아니라 action이 필요할 때 연산이 발생
+        - 이런 디자인은 스파크가 더 효율적으로 동작하게 함
+        - 예를들어, map 결과가 reduce에서 사용되는걸 알 수 있고, 크기가 큰 map 결과를 바로 반환하는게 아니라 reduce된 결과를 반환할 수 있게 됨.
+    
+    - cache
+        - 기본적으로 RDD는 action이 실행될 때 마다 재연산됨.
+        - RDD를 메모리에 유지할 수 있는데, persist나 cache 메소드 사용하면 됨. 
+        - 디스크에 유지하거나 여러 노드에 복제될 수 있게 하는 기능도 지원
+    
+    
