@@ -77,4 +77,23 @@
         - RDD를 메모리에 유지할 수 있는데, persist나 cache 메소드 사용하면 됨. 
         - 디스크에 유지하거나 여러 노드에 복제될 수 있게 하는 기능도 지원
     
-    
+- Passing Functions to Spark
+    - SPARK에서 함수를 전달하는 추천 방법 2가지 존재
+        - 익명함수
+        - 싱글톤 오브젝트의 static 메소드
+    - 인스턴스의 메소드를 넘기는 방법도 가능하긴 함(추천되진 않는듯?)
+        - 이 방법은 객체 전체를 클러스터에 보내는 것과 동일하다고 함. 
+        ```scala
+        class MyClass {
+            def func1(s: String): String = { ... }
+            def doStuff(rdd: RDD[String]): RDD[String] = { rdd.map(func1) }
+        }
+        ```
+        ```scala
+        def doStuff(rdd: RDD[String]): RDD[String] = {
+          val field_ = this.field
+          rdd.map(x => field_ + x)
+        }
+        ```
+
+- Understanding closures
