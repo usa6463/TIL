@@ -1,4 +1,5 @@
 #RDD Programming Guide
+- [doc](https://spark.apache.org/docs/3.3.0/rdd-programming-guide.html)
 
 ## Overview
 
@@ -89,11 +90,38 @@
             def doStuff(rdd: RDD[String]): RDD[String] = { rdd.map(func1) }
         }
         ```
+        - 위와 비슷하게 필드를 참조하는 것도 객체 전체를 클러스터에 보내게 됨.
         ```scala
         def doStuff(rdd: RDD[String]): RDD[String] = {
           val field_ = this.field
           rdd.map(x => field_ + x)
         }
         ```
+        - 객체 전체를 보내는 것을 피하려면 필드 값을 local variable에 복사하는 것이 좋다 
 
 - Understanding closures
+    - spark의 어려운점: variable과 method의 scope과 life cycle
+    - 스파크는 RDD 연산의 과정을 여러 태스크로 나눈다.
+        - 태스크는 익스큐터에서 실행된다
+        - execution 이전에 스파크는 태스크의 closure를 계산한다
+    - closure
+        - RDD의 연산 실행을 위해 명시 되어야 하는 변수와 메소드들
+        - 예를들면, rdd.foreach 내 명시된 부분
+        - closure는 직렬화되어 각 익스큐터에 전송된다. 
+    - closure내 변수는 익스큐터에 보내질 때 값이 카피되어 보내진다
+    - 예를들면 이 코드에서 closure 외부의 변수를 참조하고 있는데 이 값은 여러 익스큐더에 복사되어 보내지므로 counter로서의 역할을 못한다
+        - 이럴떈 Accumulator를 사용해야 함. 
+    ```scala
+    var counter = 0
+    var rdd = sc.parallelize(data)
+    
+    // Wrong: Don't do this!!
+    rdd.foreach(x => counter += x)
+    
+    println("Counter value: " + counter)
+    ```
+    - Printing elements of an RDD
+        - rdd.foreach(println) or rdd.map(println): 각 익스큐터의 stdout에 출력이 찍힘
+        - rdd.collect().foreach(println): driver에 모아서 찍긴하지만, 전체 RDD를 한 머신에 모으는 것이므로 OOM 발생할 수 있음
+        - rdd.take(100).foreach(println): 일부만 샘플로 보는 목적이라면 take를 쓰는 방법이 좋음. 
+    
