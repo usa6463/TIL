@@ -125,3 +125,22 @@
         - rdd.collect().foreach(println): driver에 모아서 찍긴하지만, 전체 RDD를 한 머신에 모으는 것이므로 OOM 발생할 수 있음
         - rdd.take(100).foreach(println): 일부만 샘플로 보는 목적이라면 take를 쓰는 방법이 좋음. 
     
+- Working with Key-Value Pairs
+    - 대부분의 spark 연산은 모든 타입에 대해 동작하지만, key-value pair에서만 동작하는 일부 연산 존재
+    - Scala 기준
+        - Tuple2 객체를 가지는 RDD 대상
+        - key-value pair 연산은 PairRDDFunctions 클래스에 있음. 이 클래스는 자동으로 tuple형태 RDD를 wrapping 함
+    - 예시
+        - reduceByKey
+        - sortByKey
+    
+- Transformations
+    - 주의해야할 메소드만 기록
+    - groupByKey([numPartitions])
+      - V에 있는 값들을 iterable 클래스에 모으는 메소드
+    - reduceByKey(func, [numPartitions])
+      - V에 있는 값들을 func 내용에 따라 집계
+    - aggregateByKey(zeroValue)(seqOp, combOp, [numPartitions])
+      - zeroValue : seqOp의 첫번째 매개변수로 들어가는 값. U 타입
+      - seqOp: K, V 타입에서 V를 U 타입으로 바꾸는 함수. 
+      - combOp: U타입으로 바뀐 값들을 집계하는 함수
