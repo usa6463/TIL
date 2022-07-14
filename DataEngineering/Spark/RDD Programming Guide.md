@@ -144,3 +144,14 @@
       - zeroValue : seqOp의 첫번째 매개변수로 들어가는 값. U 타입
       - seqOp: K, V 타입에서 V를 U 타입으로 바꾸는 함수. 
       - combOp: U타입으로 바뀐 값들을 집계하는 함수
+    - cogroup
+        - (K,V) 타입과 (K, W) 타입이 매개변수로 주어지면 (K,(Iterable<V>,Iterable<W>)) tuple을 생성함
+    - coalesce
+        - 파티션수를 줄일 때 사용. 큰 데이터셋을 필터링 하고난 후 연산을 효율적으로 수행하는데 유용. 리셔플이 일어나지 않음. 
+    - repartition
+        - 파티션수를 늘리거나 줄일 때 사용. 데이터를 랜덤하게 리셔플한다.
+    - reparitionAndSortWithinPartitions
+        - 리파티셔닝 하면서 각 파티션에서 레코드가 소팅되도록 한다. 리파티션하고 소팅하는 것보다 효율적. 소팅을 셔플 기계로 넣을 수 있기 때문
+    
+- Actions
+    - 
