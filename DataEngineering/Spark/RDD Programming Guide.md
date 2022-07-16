@@ -144,14 +144,23 @@
       - zeroValue : seqOp의 첫번째 매개변수로 들어가는 값. U 타입
       - seqOp: K, V 타입에서 V를 U 타입으로 바꾸는 함수. 
       - combOp: U타입으로 바뀐 값들을 집계하는 함수
-    - cogroup
+    - cogroup(otherDataset, [numPartitions])
         - (K,V) 타입과 (K, W) 타입이 매개변수로 주어지면 (K,(Iterable<V>,Iterable<W>)) tuple을 생성함
-    - coalesce
+    - coalesce(numPartitions)
         - 파티션수를 줄일 때 사용. 큰 데이터셋을 필터링 하고난 후 연산을 효율적으로 수행하는데 유용. 리셔플이 일어나지 않음. 
-    - repartition
+    - repartition(numPartitions)
         - 파티션수를 늘리거나 줄일 때 사용. 데이터를 랜덤하게 리셔플한다.
-    - reparitionAndSortWithinPartitions
-        - 리파티셔닝 하면서 각 파티션에서 레코드가 소팅되도록 한다. 리파티션하고 소팅하는 것보다 효율적. 소팅을 셔플 기계로 넣을 수 있기 때문
+    - repartitionAndSortWithinPartitions(partitioner)
+        - 리파티셔닝 하면서 각 파티션에서 레코드가 소팅되도록 한다. 리파티션하고 각 파티션에서 소팅하는 것보다 효율적. 소팅을 셔플 기계로 넣을 수 있기 때문
     
 - Actions
-    - 
+    - reduce(func)
+        - aggregation 연산 수행하는 액션        
+        - 정상적으로 병렬 실행 되기 위해선 commutative(가환성:교환법칙이 성립하게 하는 성질), associative(결합법칙)한 함수를 실행해야 한다
+            - 교환법칙과 결합법칙이 만족되는 경우는 실수에선 더하기, 곱하기
+    - collect()
+        - 데이터셋의 요소들을 배열 형태로 드라이버 프로그램에 반환.
+    - foreach(func)
+        - 각 요소에 대해 func 수행.
+        - 사이드 이펙트를 위해 사용(Accumulator나 외부 스토리지 시스템을 업데이트하는 것과 같은)
+
