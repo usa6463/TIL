@@ -193,4 +193,21 @@
             - 이는 lineage 가 다시 계산되는 경우 셔플 파일 다시 만들 필요 없도록 함. 
             - 이로 인해 장기 수행되는 Spark job은 많은 양의 디스크 공간 사용할 수 있음. 
             - 임시 저장소는 spark context에서 spark.local.dir 설정 파라미터로 지정 가능
-        
+
+- RDD Persistence
+    - persist or cache 사용시 데이터셋을 메모리에 유지 가능.
+    - spark의 캐시는 내결함성을 가짐. RDD의 어떤 파티션이 lost되면 자동적으로 다시 transformation 하여 재계산된다. 
+    - persist 쓸 시 각 RDD 스토리지 레벨 설정 가능
+    - cache()는 default 스토리지 레벨 사용하는 축약형임.(deserialized object를 메모리에 저장)
+    - MEMORY_ONLY_2, MEMORY_AND_DISK_2 : 2개의 클러스터 노드에 각 파티션을 복제한다. 뒤에 3이 붙으면 3개의 클러스터도 지원. 4부턴 없는듯
+    - 셔플 연산시 스파크가 자동으로 중간 데이터를 persist 한다. 셔플 중 노드 장애시 인풋 전체에 대한 재연산 피하기 위함.
+    
+    - Which Storage Level to Choose?
+        - MEMORY_ONLY(default): 가장 CPU 효율적. 가능한한 빠른 연산 제공 
+        - MEMORY_ONLY_SER : 직렬화를 통해 메모리 용량을 덜 차지하지만 조금 느려짐.
+        - 연산이 비싸거나, 많은 양의 데이터를 필터링 하기 전에는 disk에 쓰지마라. 디스크로부터 읽는 것보다 파티션 재연산이 더 빠를 수 있다.
+        - 복제된 저장소 수준은 손실된 파티션 재연산보다 빠른 오류 복구를 제공함. 
+    - Removing Data
+        - 스파크는 캐시 사용량을 모니터링 하고, LRU 방식으로 오래된 데이터 파티션을 드롭한다.
+        - 수동으로 드롭 시키고 싶다면 `RDD.unpersist()` 사용
+        - `RDD.unpersist()`는 기본적으로 차단 되지 않는데, 리소스가 해제될 때 까지 차단하려면 `blocking=true` 옵션을 명시해라
