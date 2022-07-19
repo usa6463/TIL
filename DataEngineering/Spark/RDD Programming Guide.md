@@ -211,3 +211,31 @@
         - 스파크는 캐시 사용량을 모니터링 하고, LRU 방식으로 오래된 데이터 파티션을 드롭한다.
         - 수동으로 드롭 시키고 싶다면 `RDD.unpersist()` 사용
         - `RDD.unpersist()`는 기본적으로 차단 되지 않는데, 리소스가 해제될 때 까지 차단하려면 `blocking=true` 옵션을 명시해라
+    
+- Shared Variables
+    - 클러스터 노드들에 복사되어 사용됨
+    - 2가지 종류 존재
+    - Broadcast Variables
+        - 각 머신에 저장된 read-only 변수 
+        - spark의 action은 여러개의 stage로 나눠지는데, 셔플 연산에 의해 나눠짐.
+        - 사용하기 좋은 상황        
+            - 태스크가 여러 stage에 걸쳐 동일한 데이터가 필요할 때
+            - 역직렬화된 형태의 데이터를 캐싱하기 원할 때
+      
+        - 캐싱된 브로드캐스트 제거
+            - `.unpersist()`: 이후 브로드캐스트 변수가 다시 사용되면 re-broadcast 된다
+            - `.destroy()`: 호출 이후 브로드캐스트 변수 사용 불가
+      
+    - Accumulators
+        - 병렬적으로 더하기만 지원됨. 그래서 가환성 및 결합법칙 성립해야 함.
+        - Spark UI를 통해 확인 가능
+        - 생성 방법
+            - `SparkContext.longAccumulator()`
+            - `SparkContext.doubleAccumulator()`
+        - 각 태스크들은 add 연산 가능하지만, 읽는 건 드라이버 프로그램에서만 가능
+        - AccumulatorV2를 상속하여 커스텀 타입 생성 가능 
+        - action 단계에선 Accumulators에 값 업데이트 되는게 한번만 되는게 보장
+        - 반대로 transformations 단계에선 re-excuted 될 때마다 값 업데이트가 발생
+        - 
+    
+        
