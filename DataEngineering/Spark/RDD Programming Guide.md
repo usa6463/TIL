@@ -236,6 +236,9 @@
         - AccumulatorV2를 상속하여 커스텀 타입 생성 가능 
         - action 단계에선 Accumulators에 값 업데이트 되는게 한번만 되는게 보장
         - 반대로 transformations 단계에선 re-excuted 될 때마다 값 업데이트가 발생
-        - 
+
+- mapPartition, foreachPartition
+    - mapPartition: 개별 파티션에 대해 map 연산 수행하고 결과를 반환
+    - foreachPartition: 개별 파티션에 대해 순회, 결과를 반환하진 않음. 
     
         
