@@ -150,6 +150,12 @@
       - seqOp: K, V 타입에서 V를 U 타입으로 바꾸는 함수. 
       - combOp: U타입으로 바뀐 값들을 집계하는 함수
       - reduceByKey와의 차이점은 파티션 단위에서 실행할 함수와(seqOp) 전체 파티션(드라이버?) 단위에서 실행함 함수(combOp)를 다르게 할 수 있음.
+    - combineByKey
+      - aggregateByKey 보다 좀 더 세밀하게 집계를 실행하는 함수로 보임
+      - value를 변환, 파티션 단위 병합, 여러 컴바이너 결과값을 병합 하는 3개의 단계에 대해 함수를 커스텀하게 전달 가능
+    - foldByKey
+        - 결합함수와 항등원 값을 이용해 각 키의 값을 병합
+        - 항등원 값은 결과에 여러번 사용될 수 있으나 결과 변경불가 (덧셈에선 0, 곱셈에선 1)
     - cogroup(otherDataset, [numPartitions])
         - (K,V) 타입과 (K, W) 타입이 매개변수로 주어지면 (K,(Iterable<V>,Iterable<W>)) tuple을 생성함
     - coalesce(numPartitions)
