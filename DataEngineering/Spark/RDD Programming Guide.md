@@ -138,12 +138,18 @@
     - 주의해야할 메소드만 기록
     - groupByKey([numPartitions])
       - V에 있는 값들을 iterable 클래스에 모으는 메소드
+      - 모든 익스큐터에서 함수를 적용하기전에 해당 키와 관련된 모든 값을 메모리로 읽어야 함.
+      - skew한 키가 있다면 일부 파티션이 많은 양의 값을 가질 수 있음.(OOM)
     - reduceByKey(func, [numPartitions])
       - V에 있는 값들을 func 내용에 따라 집계
+      - 각 파티션에서 리듀스 작업을 수행하기 때문에 groupByKey보다 안정적이며 모든 값을 메모리에 유지하지 않아도 됨.
+      - 최종 리듀스 과정 제외한 모든 작업은 개별 워커에서 처리하기 때문에 연산중에 셔플이 발생하지 않음.
+      - 정리하면 groupByKey는 일단 특정 파티션에 모든 K의 V를 다 모으고 시작하는거고, reduceByKey는 각 파티션에서 같은 K에 대한 aggregate를 먼저 진행하고 최종적으로 K별로 reduce를 한번 더 하는것
     - aggregateByKey(zeroValue)(seqOp, combOp, [numPartitions])
       - zeroValue : seqOp의 첫번째 매개변수로 들어가는 값. U 타입
       - seqOp: K, V 타입에서 V를 U 타입으로 바꾸는 함수. 
       - combOp: U타입으로 바뀐 값들을 집계하는 함수
+      - reduceByKey와의 차이점은 파티션 단위에서 실행할 함수와(seqOp) 전체 파티션(드라이버?) 단위에서 실행함 함수(combOp)를 다르게 할 수 있음.
     - cogroup(otherDataset, [numPartitions])
         - (K,V) 타입과 (K, W) 타입이 매개변수로 주어지면 (K,(Iterable<V>,Iterable<W>)) tuple을 생성함
     - coalesce(numPartitions)
