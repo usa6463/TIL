@@ -253,4 +253,16 @@
     - mapPartition: 개별 파티션에 대해 map 연산 수행하고 결과를 반환
     - foreachPartition: 개별 파티션에 대해 순회, 결과를 반환하진 않음. 
     
+- 조인
+    - 내부조인
+        - 2개의 RDD 필요        
+        - 출력 파티션수 설정 가능 `KVcharacters.join(keyedChars, outputPartitions).count()`
+        - 조인 종류
+            - fullOuterJoin: 조인 조건에 맞지 않더라도 양측의 RDD에 존재하는 row가 최소한 1개는 존재하도록 함. 
+            - leftOuterJoin
+            - rightOuterJoin
+            - cartesian
+    - zip
+        - 동일한 길이, 동일한 수의 파티션인 2개의 RDD 필요
+        - 파티션 수 다른데 zip 사용하면 exception 발생
         
