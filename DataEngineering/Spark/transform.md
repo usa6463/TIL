@@ -1,0 +1,11 @@
+- transform dependency 종류
+  - wide transformation
+    - 부모 RDD의 각 파티션이 2개 이상의 자식 RDD에서 사용되면 wide dependency
+    - example) groupByKey, join with not co-partitioned input 
+  - narrow transformation
+    - 부모 RDD의 각 파티션이 최대 1개의 자식 RDD에서 사용되면 narrow dependency
+    - example) map, filter, union, join with co-partitioned input
+
+- transform 종류
+  - explode
+    - value에 배열이 있으면 배열의 각 요소에 대해 행으로 반환
