@@ -2,7 +2,9 @@
   - 비싸고 느린 작업
 - 스파크 클러스터의 메모리 구조
   - 워커노드 기준
-    - overhead memory <!-- TODO -->
+    - overhead memory
+      - 기본적으로 Max(executor.memory*0.10 , 384mb)
+      - 메모리 오버헤드는 Java NIO 다이렉트 버퍼, 스레드 스택, 공유 네이티브 라이브러리 또는 메모리 매핑 파일에 사용됩니다
     - on-heap memory
       - spill과 직접적인 연관이 있는 부분
       - reserved memory
@@ -13,12 +15,14 @@
         - 캐싱과 브로드캐스팅 데이터를 위한 공간
       - execution memory
         - shuffle, join, aggregation, sort를 위한 공간 
-    - off-heap memory <!-- TODO (왜 이런게 있는지, jvm이 OS 메모리 전체 다 못쓰나?) -->
+    - off-heap memory 
       - OS에 의해 관리
         - GC collection 오버헤드가 없음.
+      - JVM 메모리 외의 영역에서 SPARK가 사용할 메모리 지정 
       - 보완적인 메모리 
       - spark.conf.set(spark.memory.offHeap.enabled, true)를 설정해야 사용가능
-      - off-heap에서 데이터를 읽어와 on-heap에 쓰는 과정(역직렬화)에 사용
+      - spark.memory.offHeap.enabled 옵션을 통해 활성화 한다면 Spark 에서는 Storage Memory, Execution Memory 를 On-heap 이외에도 Off-heap 까지 활용
+      - off-heap에서 데이터를 읽어와 on-heap에 쓰는 과정(역직렬화) 필요
         - 역직렬화에 대한 오버헤드 존재 
       
   - 참고로 storage, execution 영역은 Unified되어 있어서 메모리가 공유되고, 서로 공간을 빌릴 수 있음.
