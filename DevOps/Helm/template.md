@@ -84,6 +84,11 @@
   - NOTES.txt를 예외
   - 그리고 이름이 _로 시작하는 파일은 K8s manifest를 포함하지 않는다. 대신 partial, helper로써 다른 template에서 사용될 수 있다.
 
+## NOTES.txt
+- `helm install`이나 `helm upgrade`가 끝나면 사용자에게 출력되는 내용
+- `/templates` 디렉토리 내에 포함된다
+- 템플릿처럼 처리되며 모든 일반 템플릿 객체 접근 가능
+
 
 ## TIP
 - 중괄호 사용시 {{-,  -}} 같이 하이픈을 붙이면 왼쪽 혹은 오른쪽의 공백을 제거 가능
