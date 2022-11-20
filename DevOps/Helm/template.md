@@ -48,6 +48,43 @@
 - 값 할당시엔 := 를 사용 
   - ex. `{{- $relname := .Release.Name -}}`
 
+## Named Template
+- 파일안에 명시된 탬플릿이나 이름이 주어짐. 
+- 템플릿 관리를 위한 3가지 Action (함수가 아니다)
+  - `define`: named template을 선언하는데 사용
+    - ```
+      {{/* Generate basic labels */}}
+      {{- define "mychart.labels" }}
+      labels:
+      generator: helm
+      date: {{ now | htmlDate }}
+      {{- end }}
+      ```
+  - `template`: 선언된 named template를 불러오는데 사용
+    - ```
+      metadata:
+      name: {{ .Release.Name }}-configmap
+      {{- template "mychart.labels" . }}
+      ```
+    - 두번째 argument에는 scope를 전달해준다.
+    - 사용중 indent가 생각지 못하게 들어갈 수 있다. 이건 대체되는 텍스트가 오른쪽 정렬이기 때문(?). 잘 이해는 안감
+    - 대신 include 함수로 indent 제어하면서 named template 가져올 수 있음.
+  - `block`
+- `include` 함수
+  - `template` action과 유사한 동작을 한다.
+  - 단 가지고온 named template 내용에 대해 indent를 적용 가능함. 
+    - ex. `{{ include "mychart.app" . | indent 2 }}`
+
+- 주의사항
+  - 템플릿 이름은 global
+  - 동일한 이름의 template이 있다면 나중에 Load된 템플릿이 사용됨
+    - 이를 막기위한 네이밍 컨벤션으로 chart 이름을 prefix로 붙이는게 유명함
+- 템플릿 파일 네이밍 컨벤션
+  - 대부분의 template 파일은 K8s manifest를 포함한다
+  - NOTES.txt를 예외
+  - 그리고 이름이 _로 시작하는 파일은 K8s manifest를 포함하지 않는다. 대신 partial, helper로써 다른 template에서 사용될 수 있다.
+
+
 ## TIP
 - 중괄호 사용시 {{-,  -}} 같이 하이픈을 붙이면 왼쪽 혹은 오른쪽의 공백을 제거 가능
 - |- 는 multi line string 선언에 사용 가능
