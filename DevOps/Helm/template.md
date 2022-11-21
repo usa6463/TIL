@@ -89,6 +89,54 @@
 - `/templates` 디렉토리 내에 포함된다
 - 템플릿처럼 처리되며 모든 일반 템플릿 객체 접근 가능
 
+## 파일 접근하기
+- 탬플릿 렌더링 하는 것 외에, 파일 내용을 그대로 읽어올(inject) 수도 있다.
+- `.Files` 객체를 통해 가능하나 일부 파일은 불가능하다
+  - `/templates` 디렉토리 내 파일은 불가능
+  - `.helmignore`로 인해 제외된 파일은 액세스 불가능 
+- chart에 file을 추가해도 되지만 쿠버네티스 객체 저장소 크기에는 한계가 있어, 차트의 크기는 1M보단 작아야 한다
+- 접근 방법
+  - `.Files.Get 파일명`
+- 경로 헬퍼
+  - base, dir, ext, isAbs, clean
+  - Go lang의 path 패키지라고 한다. helm 쪽 함수명 첫글자가 소문자인것만 다름.
+  - file path에 대한 standard한 연산 제공
+- Glob 패턴
+  - `Files.Glob(pattern string)` 으로 글롭 패턴이라는 것을 통해 특정 파일만 추출할 수 있음.
+- Lines
+  - Lines 를 통해 파일의 각 라인을 리스트 같이 받아올 수 있음. => range와 결합해서 사용 가능 
+    - ```
+      data:
+        some-file.txt: {{ range .Files.Lines "foo/bar.txt" }}
+          {{ . }}{{ end }}
+      ```
+
+## 서브차트와 글로벌 값
+- 서브차트에 대한 디테일
+  - 서브차트는 부모 차트에 의존성을 가지지 않는다
+  - 부모차트는 그래서 부모 차트의 values에 접근할 수 없다
+  - 부모 차트는 서브 차트의 values를 Override할 수 있다.
+  - 헬름은 모든 차트들이 접근 가능한 글로벌 values를 가질 수 있다. 
+- 서브차트 values 오버라이딩 방법
+  - 부모 차트의 values.yaml에서 서브차트의 이름으로 키를 만든다. 그리고 그 키 안의 values들은 서브차트에 오버라이딩 된다.
+  - ex
+    - ```yaml
+      mysubchart:
+        dessert: icecream
+      ```
+    - 위와 같이 부모차트의 values에 명시해두면, 서브차트에선 .Values.dessert 가 위 값으로 오버라이딩됨. 
+  - 단 helm install 할 때 부모차트 기준으로 install 할때만 적용. 
+- 글로벌 value
+  - parent chart의 values.yaml에 global이라는 키를 만들고 그 안에 values들을 넣으면 부모, 서브 차트 관계 없이 모두 접근가능. {{ .Values.global.... }}
+- named template의 경우 부모, 서브 차트 관계 없이 전역적으로 공유된다. 
+
+## .helmignore 파일
+- `helm package` 명령시 추가하지 않을 파일을 명시할 수 있다. 
+
+## 디버깅
+- `helm lint`: 코드가 모범 사례에 맞는지 검증 가능
+- `helm install --debug --dry-run`, `helm template --debug` : 렌더링된 탬플릿 확인 가능
+- `helm get manifest` : 배포된 helm chart 대상으로 어떤 Template들이 배포되었는지 확인 가능
 
 ## TIP
 - 중괄호 사용시 {{-,  -}} 같이 하이픈을 붙이면 왼쪽 혹은 오른쪽의 공백을 제거 가능
