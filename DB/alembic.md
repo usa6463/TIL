@@ -132,4 +132,9 @@ init 하고 나면 보통 위와 같은 구조를 가짐
     - env.py의 run_migrations_online에서 `user_module_prefix="myapp.migration_types.",` 와 같이 설정한다.
     - 이후 해당 타입을 사용할 때 `Column("my_column", myapp.migration_types.MyCustomType())` 이런식으로 사용 가능 (myapp.models.utils.types 가 아니라 myapp.migration_types 가 되었다.)
 
-https://alembic.sqlalchemy.org/en/latest/autogenerate.html#affecting-the-rendering-of-types-themselves 볼 차례
+## 그 외 인지는 하고 있으면 좋을만한 키워드들. 
+  - 자세한 내용은 필요해질때 찾아보자
+  - 커스텀 타입을 위한 comparing 로직을 추가할 수 있는듯 
+  - revision 명령어로 생성되는 revision 스크립트에 대한 Post processing 가능
+    - 포맷팅을 고치던가, 코드 분석하던가, 다시 작성하는데 사용 가능
+  - `alembic check` 명령어로 새로운 revision이 필요한 상황인지 체크 가능
