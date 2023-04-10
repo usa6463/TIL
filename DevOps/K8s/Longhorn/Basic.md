@@ -1,0 +1,21 @@
+# Basic
+
+- longhorn을 간략히 설명하면
+  - distributed block storage system for Kubernetes
+  - block storage란?
+    - [block stoarge vs object storage](https://cloudacademy.com/blog/object-storage-block-storage/)
+      - block storage
+        - 고정된 크기의 raw한 스토리지 제공
+        - 각 볼륨은 독립적, 외부 OS에 의해 컨트롤(OS에 attach 되어 있어야 접근 가능!)
+        - guset OS에 마운트될 수도 있음 
+        - 예) iSCSI, SAN, local disks, EBS, google persistent disk
+        - 보통 다음과 같은 파일시스템으로 포맷됨: FAT32, NTFS, EXT3, EXT4
+      - object storage
+        - OS attach 없이, API만으로 접근 가능
+        - 오브젝트 데이터와 메타데이터로 구성
+        - replication 가능 
+        - 접속을 위한 간단한 웹서비스 인터페이스 제공 가능
+        - 스케일링 가능
+        - 예) S3, GCS
+  - distributed block storage란?
+    - 
