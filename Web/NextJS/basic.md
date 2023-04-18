@@ -35,5 +35,7 @@
       - 모든 Node.js API, 에코시스템의 호환되는 패키지들에 접근 가능
     - Edge
       - 웹 API 기반
-  - 
+  - When to use Server vs. Client Components?
+    - ![img.png](image/When to use Server vs. Client Components?.png)
+
 - 
