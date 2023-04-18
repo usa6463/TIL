@@ -36,6 +36,6 @@
     - Edge
       - 웹 API 기반
   - When to use Server vs. Client Components?
-    - ![img.png](image/When to use Server vs. Client Components?.png)
+    - ![img.png](image/1.png)
 
 - 
