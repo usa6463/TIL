@@ -73,3 +73,17 @@
   - Streaming and Suspense
     - 렌더링된 Unit을 점진적으로 클라이언트에 stream하는 기능
     - 서버 컴포넌트이고, 데이터를 필요로 하는 nested layout이 있는경우, 데이터 필요없는 부분은 즉시 렌더링하고 데이터 필요한 부분은 로드 상태 표시
+  - CSS Modules
+    - .module.css 파일을 참조하여 유니크한 클래스 이름을 생성한다. 
+    - 충돌 걱정 없이 서로 다른 파일에 있는 동일한 클래스 이름들을 사용할 수 있게 한다.
+    - `import styles from './styles.module.css';`
+    - `eturn <section className={styles.dashboard}>{children}</section>;`
+  - CSS-in-JS
+    - 현재 client component에서만 지원
+    - server component에 style을 적용하고 싶다면 PostCSS or Tailwind CSS 등 CSS file을 output하는 솔루션을 써라
+  - Sass
+    - sass는 css extension [라이브러리](https://github.com/sass/sass)
+    - .scss, .sass 확장자 파일을 통해 sass에 대한 빌트인 지원을 한다. 
+    - .module.scss 또는 .module.sass 파일을 통해 컴포넌트 레벨 Sass를 사용 가능
+
+ 
