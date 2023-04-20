@@ -38,4 +38,38 @@
   - When to use Server vs. Client Components?
     - ![img.png](image/1.png)
 
-- 
+  - Fetching Data on the Server
+    - data fetching은 서버 컴포넌트에서 하는걸 추천함
+  - Component-level Data Fetching
+    - 이 모델에서 pages, layouts 내 데이터를 fetch 할 수 있음.
+    - parent Layout은 child layout과 데이터를 주고 받는게 불가능. 각 레이아웃에서 필요한 데이터 Fetch 하는걸 추천
+      - 동일한 데이터를 여러번 호출한다고 해도 NextJs는 요청에 대한 cache, dedupe을 통해 중복 Fetching을 피한다
+  - Parallel and Sequential Data Fetching
+    - parallel: 데이터를 동시에 로드. 로딩 시간 단축에 도움
+    - sequential: 로딩시간을 늘지만 특정 케이스에 유용
+      - 하나의 Fetch가 다른 fetch의 결과에 의존성을 가지는 경우
+      - 다음 Fetch 전에 리소스를 저장하고 싶은 경우 
+  - Automatic fetch() Request Deduping
+    - 레이아웃, 페이지 트리에서 동일 데이터에 대한 여러번의 fetch가 있을 경우 cache와 dedupe가 지원됨
+    - 캐시 라이프타임
+      - server: 렌더링 프로세스가 끝날 때 까지
+      - client: 세션동안
+    - 참고로 Post 요청은 자동적으로 dedup 되지 않는다 
+  - Static and Dynamic Data Fetches
+    - 데이터의 종류엔 2가지가 있음.
+      - static: 자주 변하지 않는 것. ex) 블로그 포스트
+      - dynamic: 자주 변하고, 특정 유저에게 specific한 데이터. ex) 쇼핑 카트 리스트
+    - static은 캐싱이 적용되고, dynamic은 그렇지 않다
+    - static이 request 수도 줄이고, loading 퍼포먼스도 증가시키지만 dynamic이 필요할 때가 있다
+      - 데이터가 유저 개인화된 경우
+      - 언제나 최신 데이터를 읽고 싶은 경우 
+  - Caching Data
+    - nextjs는 캐시로 persistent HTTP cache를 사용한다. 이는 globally distributed 가능
+  - Revalidating Data
+    - 캐시를 제거하고 최신 데이터를 가져오는 방법
+    - 2개 타입 존재
+      - background: 일정 시간 간격으로 revalidate
+      - On-demand: 업데이트가 있을 때만 revalidate
+  - Streaming and Suspense
+    - 렌더링된 Unit을 점진적으로 클라이언트에 stream하는 기능
+    - 서버 컴포넌트이고, 데이터를 필요로 하는 nested layout이 있는경우, 데이터 필요없는 부분은 즉시 렌더링하고 데이터 필요한 부분은 로드 상태 표시
