@@ -85,5 +85,9 @@
     - sass는 css extension [라이브러리](https://github.com/sass/sass)
     - .scss, .sass 확장자 파일을 통해 sass에 대한 빌트인 지원을 한다. 
     - .module.scss 또는 .module.sass 파일을 통해 컴포넌트 레벨 Sass를 사용 가능
+  - next.config.js
+    - 설정파일
+    - 프로젝트 디렉토리의 루트에 있음
+  - 
 
  
